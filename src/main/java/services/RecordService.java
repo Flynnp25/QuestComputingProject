@@ -10,4 +10,5 @@ import java.util.List;
 public interface RecordService {
     public Record createNewRecord(Record record);
     public List<Record> findAllRecords();
+
 }

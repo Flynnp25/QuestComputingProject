@@ -42,5 +42,6 @@ public class JpaRecordRepository implements RecordRepository {
     @Override
     public Record createRecord(Record data) {
         em.persist(data);
-        return data;    }
+        return data;
+    }
 }

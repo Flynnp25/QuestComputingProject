@@ -51,9 +51,9 @@ public class RecordValidation {
 
     private static boolean invalidMobilePrefix(String mobileNumber) {
         if (mobileNumber.substring(0,2).equals("08")){
-            return true;
-        }else {
             return false;
+        }else {
+            return true;
         }
     }
 

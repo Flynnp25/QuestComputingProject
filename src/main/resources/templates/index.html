@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="css/bootstrap-3.3.6-dist/css/bootstrap.css"/>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>Home</h1>
+        </div>
+    </div>
+        <div class="row">
+            <div class="col-md-12 text-center" style="margin-bottom: 20px;">
+                <a type="button" class="btn btn-primary btn-lg " th:href="@{/addNewRecord}">Add New Record</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <a type="button" class="btn btn-primary btn-lg" th:href="@{/listAllRecords}">List All Records</a>
+            </div>
+        </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="css/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Add New Record</title>
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>-->
+    <link rel="stylesheet" href="css/bootstrap-3.3.6-dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="../static/css/bootstrap-3.3.6-dist/css/bootstrap.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+</head>
+<body>
+
+<a type="button" class="btn btn-primary btn-sm " style="margin: 10px" th:href="@{/}"><span
+        class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>Home</a>
+
+<div class="bootstrap-iso">
+    <div class="container-fluid" style="margin-top: 10%">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <h3>Add New Record</h3>
+
+                <div class="form-group">
+                    <form id="recordForm" action="#" th:action="@{/processAddNewRecord}" th:object="${record}" method="post">
+                        <table class="table table-responsive">
+                            <tr>
+                                <td class="col-sm-4">Name:</td>
+                                <td><input type="text" class="form-control" th:field="*{name}"/></td>
+                                <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-4"><p>PPS Number: </p></td>
+                                <td><input type="text" class="form-control" th:field="*{ppsNumber}"/></td>
+                                <td th:if="${#fields.hasErrors('ppsNumber')}" th:errors="*{ppsNumber}">PPS Error</td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-4">Date of Birth:</td>
+                                <td>
+                                    <div class="input-group">
+                                        <input class="form-control" id="date" placeholder="DD/MM/YYYY" type="text"
+                                               th:field="*{dateOfBirth}"/>
+                                    </div>
+                                </td>
+                                <td th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}">DOB Error
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-4"><p>Mobile Number:</p></td>
+                                <td><input id="mobileNum" type="text" class="form-control" th:field="*{mobileNumber}"/></td>
+                                <td th:if="${#fields.hasErrors('mobileNumber')}" th:errors="*{mobileNumber}">Mobile Num
+                                    Error
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><p><input type="submit" class="btn btn-default" value="Submit"/></p></td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+                <div th:if="${errMsg != null}">
+                    <div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1" role="dialog"
+                         aria-labelledby="mySmallModalLabel">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                            aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title text-danger" id="mySmallModalLabel">Error Message</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p th:text="${errMsg}"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+<script src="css/bootstrap-3.3.6-dist/js/bootstrap.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var date_input = $('input[name="dateOfBirth"]'); //our date input has the name "date"
+        var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'dd/mm/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true
+        })
+    })
+</script>
+<div th:if="${errMsg != null}">
+    <script>
+        $(document).ready(function () {
+            $('#myModal').modal('show');
+        });
+    </script>
+</div>
+<script>
+    function _calculateAge(birthday) { // birthday is a date
+        var ageDifMs = Date.now() - birthday.getTime();
+        var ageDate = new Date(ageDifMs); // miliseconds from epoch
+        return Math.abs(ageDate.getUTCFullYear() - 1970);
+    }
+
+    $.validator.addMethod(
+            "dateOfBirthValidator",
+            function(value, element) {
+                return value.match(/^\d\d?\/\d\d?\/\d\d\d\d$/);
+            },
+            "Please enter a date in the format dd/mm/yyyy."
+    );
+
+    $.validator.addMethod(
+            "dateValidator",
+            function(value, element) {
+                var selectedDate = $('#date').datepicker('getDate');
+                var now = new Date();
+                // new Date(selectedDate) < new Date();
+                return false;
+            },
+            "Please enter a date in the past."
+    );
+
+    $.validator.addMethod(
+            "ageValidator",
+            function(value, element) {
+                var age = _calculateAge(new Date($("#date").value()));
+                return age >= 16;
+            },
+            "You must be 16 or older."
+    );
+
+    $.validator.addMethod(
+            "mobileValidator",
+            function(value, element) {
+                console.log("Test");
+                console.log("Value = "+value);
+
+                if(value === undefined){
+                    return false;
+                }else if(value.substring(0,2) !== '08'){
+                    return false;
+                }else{
+                    return false;
+                }
+            },
+            "Mobile Number must start with '08"
+    );
+
+    (function($,W,D)
+    {
+        var JQUERY4U = {};
+
+        JQUERY4U.UTIL =
+        {
+            setupFormValidation: function()
+            {
+                //form validation rules
+                $("#recordForm").validate({
+                    rules: {
+                        name: {
+                            required:true,
+                            maxlength: 25,
+                            minlength: 2
+                        },
+                        ppsNumber: "required",
+                        dateOfBirth: {
+                            required: true,
+                            date: true,
+                            dateOfBirthValidator: true,
+                            dateValidator: true,
+                            ageValidator: true
+                        }
+                    },
+                    messages: {
+                        name: "Please enter a valid Name, it must be less than 25 characters.",
+                        ppsNumber: "Please enter your PPS Number.",
+                        dateOfBirth: {
+                            required: "Please provide a Date of Birth"
+                        }
+                    },
+                    submitHandler: function(form) {
+                        form.submit();
+                    }
+                });
+            }
+        };
+
+        //when the dom has loaded setup form validation rules
+        $(D).ready(function($) {
+            JQUERY4U.UTIL.setupFormValidation();
+        });
+
+    })(jQuery, window, document);
+</script>
+</body>
+</html>

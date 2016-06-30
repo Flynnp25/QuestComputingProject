@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Handling Form Submission</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../static/css/bootstrap-3.3.6-dist/bootstrap.css"/>
+</head>
+<body>
+
+<a type="button" class="btn btn-primary btn-sm " style="margin: 10px" th:href="@{/}"><span
+        class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>Home</a>
+
+<div class="container">
+    <h1>List All Records</h1>
+    <div th:if="${not #lists.isEmpty(records)}">
+        <table class="table table-responsive">
+            <tr>
+                <th>NAME</th>
+                <th>PPS</th>
+                <th>DOB</th>
+                <th>MOB NUM</th>
+            </tr>
+            <tr th:each="record : ${records}">
+                <td th:text="${record.name}"></td>
+                <td th:text="${record.ppsNumber}"></td>
+                <td th:text="${record.dateOfBirth}"></td>
+                <td th:text="${record.mobileNumber}"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</body>
+</html>
